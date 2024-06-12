@@ -77,8 +77,8 @@ bool SaveBMP(const Path& file, const Image& image) {
 // напишите эту функцию
 Image LoadBMP(const Path& file) {
     ifstream ifs(file, ios::binary);
+    assert(ifs.is_open());
     int w, h;
-    FILE* infile;
     // читаем заголовок: он содержит формат, размеры изображения
     // и максимальное значение цвета
     BitmapFileHeader file_header;
@@ -87,6 +87,8 @@ Image LoadBMP(const Path& file) {
     ifs.read((char*)&file_header, sizeof(BitmapFileHeader));
     ifs.read((char*)&info_header, sizeof(BitmapInfoHeader));
 
+    assert(file_header.b_ == 'B' && file_header.m_ == 'M' );
+    assert(info_header.width_ >= 0 && info_header.height_ >= 0 );
     //std::cout << file_header << " " << info_header << std::endl;
 
     w = info_header.width_;
@@ -95,7 +97,7 @@ Image LoadBMP(const Path& file) {
     Image result(w, h, Color::Black());
     std::vector<char> buff(GetBMPStride(w));
 
-    for (int y = h-1; y >= 0; --y) {
+    for (int y = h - 1; y >= 0; --y) {
         Color* line = result.GetLine(y);
         ifs.read(buff.data(), GetBMPStride(w));
 

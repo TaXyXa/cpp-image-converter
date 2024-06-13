@@ -87,8 +87,10 @@ Image LoadBMP(const Path& file) {
     ifs.read((char*)&file_header, sizeof(BitmapFileHeader));
     ifs.read((char*)&info_header, sizeof(BitmapInfoHeader));
 
-    assert(file_header.b_ == 'B' && file_header.m_ == 'M' );
-    assert(info_header.width_ >= 0 && info_header.height_ >= 0 );
+    if (file_header.b_ != 'B' || file_header.m_ != 'M' || info_header.width_ < 0 || info_header.height_ < 0) {
+        return {};
+    }
+
     //std::cout << file_header << " " << info_header << std::endl;
 
     w = info_header.width_;

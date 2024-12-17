@@ -41,7 +41,6 @@ static int GetBMPStride(int w) {
     return 4 * ((w * 3 + 3) / 4);
 }
 
-// напишите эту функцию
 bool SaveBMP(const Path& file, const Image& image) {
     ofstream out(file, ios::binary);
 
@@ -74,13 +73,11 @@ bool SaveBMP(const Path& file, const Image& image) {
     return out.good();
 }
 
-// напишите эту функцию
 Image LoadBMP(const Path& file) {
     ifstream ifs(file, ios::binary);
     assert(ifs.is_open());
     int w, h;
-    // читаем заголовок: он содержит формат, размеры изображения
-    // и максимальное значение цвета
+
     BitmapFileHeader file_header;
     BitmapInfoHeader info_header;
 
@@ -90,8 +87,6 @@ Image LoadBMP(const Path& file) {
     if (file_header.b_ != 'B' || file_header.m_ != 'M' || info_header.width_ < 0 || info_header.height_ < 0) {
         return {};
     }
-
-    //std::cout << file_header << " " << info_header << std::endl;
 
     w = info_header.width_;
     h = info_header.height_;

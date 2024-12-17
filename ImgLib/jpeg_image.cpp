@@ -11,7 +11,6 @@ using namespace std;
 
 namespace img_lib {
 
-// структура из примера LibJPEG
 struct my_error_mgr {
     struct jpeg_error_mgr pub;
     jmp_buf setjmp_buffer;
@@ -19,7 +18,6 @@ struct my_error_mgr {
 
 typedef struct my_error_mgr* my_error_ptr;
 
-// функция из примера LibJPEG
 METHODDEF(void)
 my_error_exit (j_common_ptr cinfo) {
     my_error_ptr myerr = (my_error_ptr) cinfo->err;
@@ -27,9 +25,7 @@ my_error_exit (j_common_ptr cinfo) {
     longjmp(myerr->setjmp_buffer, 1);
 }
 
-// В эту функцию вставлен код примера из библиотеки libjpeg.
-// Измените его, чтобы адаптировать к переменным file и image.
-// Задание качества уберите - будет использовано качество по умолчанию
+ /* Адаптация кода из библиотеки libjpeg.*/
 bool SaveJPEG(const Path& file, const Image& image) {
   jpeg_compress_struct cinfo;
   jpeg_error_mgr jerr;
@@ -74,10 +70,8 @@ bool SaveJPEG(const Path& file, const Image& image) {
   fclose(outfile);
   jpeg_destroy_compress(&cinfo);
   return true;
-  /* And we're done! */
 }
 
-// тип JSAMPLE фактически псевдоним для unsigned char
 void SaveScanlineToImage(const JSAMPLE* row, int y, Image& out_image) {
     Color* line = out_image.GetLine(y);
     for (int x = 0; x < out_image.GetWidth(); ++x) {
